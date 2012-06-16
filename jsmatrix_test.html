@@ -1,0 +1,67 @@
+<html>
+<head>
+	<script type='text/javascript' src='jsmatrix.js' ></script>
+	<style type="text/css">
+		.square {
+		    float: left;
+		    width:20px;
+		    height:20px;
+		    display:block;
+		    overflow:hidden;
+		}
+	</style>
+
+</head>
+<body>
+	<font face="Monospace">
+	<div id="test_area" style="border: 3px silver solid; float:left;">a </div>
+	<div id="text_area"><button onclick="matrix.rotate_right();paint(matrix);">Rotate Right</button></div>
+	<div id="text_area"><button onclick="matrix.rotate_left();paint(matrix);">Rotate Left</button></div>
+	<div id="text_area"><button onclick="matrix.mirror_vertical();paint(matrix);">Mirror Vertical</button></div>
+	<div id="text_area"><button onclick="matrix.mirror_horizontal();paint(matrix);">Mirror Horizontal</button></div>
+
+	</font>
+	<script>
+
+		function _log(text){
+			document.getElementById('text_area').innerHTML = text + "<br>" +document.getElementById('text_area').innerHTML;
+		}
+
+		function paint(matrix){		
+
+			var cell;
+			var background;
+			var text = "<table border='0'>";
+		
+			for( row = 0; row < matrix.rows; row++) {
+				text = text + "<tr>"
+		        	for( col = 0; col < matrix.cols; col++) {
+					cell = matrix.get_cell(row,col);
+					background = cell.get_item("background");
+					if ( background == undefined ){
+						background = "";
+					}
+		                	text = text + "<td><div class='square' style='background-color:#C0C0C0; border:1px dashed gray;' >"+background+"</div></td>";
+			        }
+				text = text + "</tr>";
+			}
+			text = text + "</table>";
+
+			document.getElementById('test_area').innerHTML = text;
+		}
+
+		var matrix = jsmatrix.matrix2d(10,10);
+		matrix.get_cell(0,0).set_item("background","A");
+		matrix.get_cell(1,1).set_item("background","A+");
+		matrix.get_cell(9,0).set_item("background","D");
+		matrix.get_cell(0,9).set_item("background","B");
+		matrix.get_cell(9,9).set_item("background","C");
+
+		paint(matrix);
+	</script>
+
+
+</body>
+<html>
+
+
