@@ -1,22 +1,41 @@
 
 var jsmatrix = {
 
+	/**
+	* Creates and returns a 2 dimensional Array.
+	*
+	* @param {Integer} rows		The width of the new matrix.
+	* @param {Integer} cols		The height of the new matrix.
+	* @return {Array[Array]}	Returns the matrix.
+	*/
 	create_matrix: function(rows, cols){
 		var matrix = new Array(rows);
 
-		// First We create the new Matrix
 		for( var row = 0; row < rows; row++) {
 			matrix[row] = new Array(cols);
 		}
 		return matrix;
 	},
 
-	// Matrix
+	/**
+	* Creates and returns a 2d matrix with lots of great methods.
+	*
+	* @param {Integer} rows		The width of the new matrix.
+	* @param {Integer} cols		The height of the new matrix.
+	* @return {Array[Array]}	Returns the matrix.
+	*/
 	matrix2d: function(rows, cols){
 		var object = {};
 		object.rows = rows;
 		object.cols = cols;
 
+		/**
+		* Returns a specified cell
+		*
+		* @param {Integer} row		The row of the cell.
+		* @param {Integer} col		The col of the cell.
+		* @return {cell}		Returns the cell.
+		*/
 		object.get_cell = function(row,col){
 			return this.matrix[row][col];
 		}
@@ -132,6 +151,18 @@ var jsmatrix = {
 				boolean = true;
 			}
 			return boolean;
+		}
+
+		object.right = function(){
+			return this.matrix.get_cell(this.row,this.col+1);
+		}
+
+		object.left = function(){
+			return this.matrix.get_cell(this.row,this.col-1);
+		}
+
+		object.up = function(){
+			return this.matrix.get_cell(this.row-1,this.col);
 		}
 
 		object.down = function(){
