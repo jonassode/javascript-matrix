@@ -51,6 +51,11 @@ var jsmatrix = {
 			cell.matrix = this;
 		}
 
+		object.create_vos_matrix = function(){
+			var matrix = jsmatrix.create_matrix(this.rows, this.cols);
+			return matrix;
+		}
+
 		object.rotate_right = function(){
 			var matrix = jsmatrix.create_matrix(this.rows, this.cols);
 
@@ -157,6 +162,10 @@ var jsmatrix = {
 			return boolean;
 		}
 
+		object.items = function(){
+			return this.hash.hash;
+		}
+
 		object.right = function(){
 			var col = this.col+1;
 			return this.matrix.get_cell(this.row, col);
@@ -177,6 +186,17 @@ var jsmatrix = {
 			return this.matrix.get_cell(row, this.col);
 		}
 
+		object.directions = function(){
+			var array = new Array();
+
+			array.push(this.up());
+			array.push(this.right());
+			array.push(this.down());
+			array.push(this.left());
+
+			return array;
+		}
+
 		object.move = function(item, cell){
 			this.remove_item(item.key);
 			cell.set_item(item.key, item);
@@ -193,16 +213,24 @@ var jsmatrix = {
 		
 		object.set = function(key, item){
 			this.size++;
-			this.hash[key] = item;
+			this.hash.push(item);
 		}
 
 		object.get = function(key){
-			return this.hash[key];
+			for (var i=0;i<this.hash.length;i++){
+				if (this.hash[i].key == key){
+					return this.hash[i];
+				}
+			}
 		}
 
 		object.remove = function(key){
-			this.hash[key] = undefined;
-			this.size--;
+			for (var i=0;i<this.hash.length;i++){
+				if (this.hash[i].key == key){
+					this.hash.splice(i,1);
+					this.size--;
+				}
+			}
 		}
 
 		object.length = function(){
