@@ -1,0 +1,38 @@
+<html>
+<head>
+	<script type='text/javascript' src='jsmatrix.js' ></script>
+</head>
+<body>
+	<div id="test_area" style="border: 3px silver solid; float:left;"><b>Log:</b><br/></div>
+	<script>
+	
+	    function generate(rows, cols){
+	
+	        var numberOfCells = rows * cols; 
+	        
+		    // Setting up the start time
+		    var start_time = (new Date).getTime();
+		    // Start the traverse
+		    var matrix = jsmatrix.matrix2d(rows,cols);
+		    // Calculating the diff time
+		    var diff_time = (new Date).getTime() - start_time;
+
+            var log = "Generated "+rows+"x"+cols+" matrix ( "+numberOfCells+" cells ) in " + diff_time + " ms.<br/>";
+            
+		    document.getElementById('test_area').innerHTML += log;
+		
+		}
+		
+		generate(10,10);
+		generate(100,10);
+		generate(10,100);
+		generate(100,100);
+		generate(100,1000);
+
+
+	</script>
+
+</body>
+<html>
+
+
