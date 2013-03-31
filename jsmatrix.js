@@ -116,7 +116,6 @@ var jsmatrix = {
 		return object;
 	},
 
-
 	// Cell
 	cell: function(){
 		var object = {};
@@ -201,7 +200,6 @@ var jsmatrix = {
 			this.remove_item(item.key);
 			cell.set_item(item.key, item);
 		}
-
 
 		return object;
 	},

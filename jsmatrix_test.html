@@ -37,12 +37,10 @@
 				text = text + "<tr>"
 		        	for( col = 0; col < matrix.cols; col++) {
 					cell = matrix.get_cell(row,col);
-					background = cell.get_item("background");
-					if ( background == undefined ){
-						background = "";
-					}
-		                	text = text + "<td><div class='square' style='background-color:#C0C0C0; border:1px dashed gray;' >"+background+"</div></td>";
-			        }
+					background = cell.get_item("background") ? cell.get_item("background").text : "";
+					
+		          	text = text + "<td><div class='square' style='background-color:#C0C0C0; border:1px dashed gray;' >"+background+"</div></td>";
+			    }
 				text = text + "</tr>";
 			}
 			text = text + "</table>";
@@ -51,11 +49,11 @@
 		}
 
 		var matrix = jsmatrix.matrix2d(10,10);
-		matrix.get_cell(0,0).set_item("background","A");
-		matrix.get_cell(1,1).set_item("background","A+");
-		matrix.get_cell(9,0).set_item("background","D");
-		matrix.get_cell(0,9).set_item("background","B");
-		matrix.get_cell(9,9).set_item("background","C");
+		matrix.get_cell(0,0).set_item("background",{text: "A"});
+		matrix.get_cell(1,1).set_item("background",{text: "A+"});
+		matrix.get_cell(9,0).set_item("background",{text: "D"});
+		matrix.get_cell(0,9).set_item("background",{text: "B"});
+		matrix.get_cell(9,9).set_item("background",{text: "C"});
 
 		paint(matrix);
 	</script>
