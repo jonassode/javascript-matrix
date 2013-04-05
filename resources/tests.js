@@ -89,6 +89,24 @@ test( "Cell Items", function() {
 
 });
 
+test( "Cell Directions", function() {
+  var matrix = new jsmatrix.Matrix2d(5,5);
+  var cell = matrix.get_cell(3,3);
+  var directions = cell.directions();
+
+  ok( directions.length === 4, "There should be 4 directions." );
+
+});
+
+test( "Cell Directions Diagonal", function() {
+  var matrix = new jsmatrix.Matrix2d(5,5, new jsmatrix.SquareDiagonal());
+  var cell = matrix.get_cell(3,3);
+  var directions = cell.directions();
+
+  ok( directions.length === 8, "There should be 4 directions." );
+
+});
+
 
 
 

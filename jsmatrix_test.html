@@ -48,7 +48,7 @@
 		    var directions = cell.directions();
 		    
 		    for( var j = 0; j < directions.length; j++) {
-		        directions[j].set_item("direction",{});
+		        directions[j] ? directions[j].set_item("direction",{}) : false;
 		    }
 		    
 		    paint(matrix);
@@ -76,7 +76,7 @@
 			document.getElementById('test_area').innerHTML = text;
 		}
 
-		var matrix = new jsmatrix.Matrix2d(10,10);
+		var matrix = new jsmatrix.Matrix2d(10,10, new jsmatrix.SquareDiagonal());
 		matrix.get_cell(0,0).set_item("background",{text: "A"});
 		matrix.get_cell(1,1).set_item("background",{text: "A+"});
 		matrix.get_cell(9,0).set_item("background",{text: "D"});

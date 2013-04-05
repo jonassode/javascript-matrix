@@ -1,6 +1,38 @@
 
 var jsmatrix = (function(){
 
+    function SquareNonDiagonal(){
+        this.type = "SquareNonDiagonal";
+    }
+    SquareNonDiagonal.prototype.directions = function(cell){
+    	var array = new Array();
+
+	    array.push(cell.up());
+	    array.push(cell.right());
+	    array.push(cell.down());
+	    array.push(cell.left());
+
+	    return array;
+    }
+    
+    function SquareDiagonal(){
+        this.type = "SquareDiagonal";   
+    }
+    SquareDiagonal.prototype.directions = function(cell){
+    	var array = new Array();
+
+	    array.push(cell.up());
+	    array.push(cell.right());
+	    array.push(cell.down());
+	    array.push(cell.left());
+	    array.push(cell.ne());
+	    array.push(cell.se());
+	    array.push(cell.nw());
+	    array.push(cell.sw());
+
+	    return array;
+    }
+
 	/**
 	* Creates and returns a 2 dimensional Array.
 	*
@@ -24,9 +56,10 @@ var jsmatrix = (function(){
 	* @param {Integer} cols		The height of the new matrix.
 	* @return {Array[Array]}	Returns the matrix.
 	*/
-	function Matrix2d(rows, cols){
+	function Matrix2d(rows, cols, type){
 		this.rows = rows;
 		this.cols = cols;
+		this.type = type? type: new SquareNonDiagonal();
 		
 		this.matrix = new Array(rows);
 
@@ -192,15 +225,37 @@ var jsmatrix = (function(){
 		return this.matrix.get_cell(row, this.col);
 	}
 
+	Cell.prototype.ne = function(){
+		var row = this.row - 1;
+		var col = this.col + 1;
+
+		return this.matrix.get_cell(row, col);
+	}
+
+	Cell.prototype.se = function(){
+		var row = this.row + 1;
+		var col = this.col + 1;
+
+		return this.matrix.get_cell(row, col);
+	}
+	
+	Cell.prototype.nw = function(){
+		var row = this.row - 1;
+		var col = this.col - 1;
+
+		return this.matrix.get_cell(row, col);
+	}
+
+	Cell.prototype.sw = function(){
+		var row = this.row + 1;
+		var col = this.col - 1;
+
+		return this.matrix.get_cell(row, col);
+	}
+
 	Cell.prototype.directions = function(){
-		var array = new Array();
 
-		array.push(this.up());
-		array.push(this.right());
-		array.push(this.down());
-		array.push(this.left());
-
-		return array;
+		return this.matrix.type.directions(this);
 	}
 
 	Cell.prototype.move = function(item, cell){
@@ -262,7 +317,8 @@ var jsmatrix = (function(){
 	
 	return {
 	    Matrix2d: Matrix2d,
-	    create_matrix: create_matrix
+	    create_matrix: create_matrix,
+	    SquareDiagonal: SquareDiagonal
 	}
 
 }())
