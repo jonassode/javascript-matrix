@@ -121,6 +121,7 @@ var jsmatrix = {
 		var object = {};
 		object.hash  = jsmatrix.hash();
 
+        // Test: OK
 		object.set_item = function(key,item){
 			this.hash.set(key,item);
 			item.key = key;
@@ -129,10 +130,12 @@ var jsmatrix = {
 			item.cell = this;			
 		}
 
+        // Test: OK
 		object.get_item = function(key){
 			return this.hash.get(key);
 		}
 		
+		// Test: OK
 		object.remove_item = function(key){
 			var item = this.hash.get(key);
 			this.hash.remove(key);
@@ -141,11 +144,13 @@ var jsmatrix = {
 			item.cell = undefined;			
 		}
 
+        // Test: OK
 		object.size = function(){
-			return this.hash.size();
+			return this.hash.size;
 		}
 
-		object.has_item = function(key){
+        // Test: OK
+		object.has_item_by_type = function(key){
 			var boolean = false;
 			if ( this.hash.get(key) != undefined ){
 				boolean = true;
@@ -153,6 +158,7 @@ var jsmatrix = {
 			return boolean;
 		}
 
+        // Test: OK
 		object.has_item = function(){
 			var boolean = false;
 			if ( this.hash.length() != 0 ){
@@ -161,10 +167,12 @@ var jsmatrix = {
 			return boolean;
 		}
 
+        // Test: OK
 		object.items = function(){
 			return this.hash.hash;
 		}
 
+        // Test: OK
 		object.right = function(){
 			var col = this.col+1;
 			return this.matrix.get_cell(this.row, col);
