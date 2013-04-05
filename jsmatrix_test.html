@@ -8,7 +8,15 @@
 		    height:20px;
 		    display:block;
 		    overflow:hidden;
+		    border:1px dashed gray;
 		}
+		.gray {
+				    background-color:#C0C0C0;
+        }
+        .pink {
+				    background-color:pink;
+        }
+		
 	</style>
 
 </head>
@@ -19,6 +27,7 @@
 	<div id="text_area"><button onclick="matrix.rotate_left();paint(matrix);">Rotate Left</button></div>
 	<div id="text_area"><button onclick="matrix.mirror_vertical();paint(matrix);">Mirror Vertical</button></div>
 	<div id="text_area"><button onclick="matrix.mirror_horizontal();paint(matrix);">Mirror Horizontal</button></div>
+    <div><b>Directions:</b></br>Click a square to show all it's possible directions.</div>
 
 	</font>
 	<script>
@@ -26,7 +35,25 @@
 		function _log(text){
 			document.getElementById('text_area').innerHTML = text + "<br>" +document.getElementById('text_area').innerHTML;
 		}
-
+		
+		function draw_directions(r, c){
+			for( var row = 0; row < matrix.rows; row++) {
+		        	for( var col = 0; col < matrix.cols; col++) {
+		        	    var cell = matrix.get_cell(row,col);
+		        	    cell.has_item_by_type("direction") ? cell.remove_item('direction') : false;
+		        	}
+		    }
+		    
+		    var cell = matrix.get_cell(r,c);
+		    var directions = cell.directions();
+		    
+		    for( var j = 0; j < directions.length; j++) {
+		        directions[j].set_item("direction",{});
+		    }
+		    
+		    paint(matrix);
+		}
+		
 		function paint(matrix){		
 
 			var cell;
@@ -37,9 +64,10 @@
 				text = text + "<tr>"
 		        	for( col = 0; col < matrix.cols; col++) {
 					cell = matrix.get_cell(row,col);
-					background = cell.get_item("background") ? cell.get_item("background").text : "";
+					background = cell.has_item_by_type("background") ? cell.get_item("background").text : "";
+					var style = cell.has_item_by_type("direction") ? "pink" : "gray";
 					
-		          	text = text + "<td><div class='square' style='background-color:#C0C0C0; border:1px dashed gray;' >"+background+"</div></td>";
+		          	text = text + "<td onclick='draw_directions("+row+","+col+");'><div class='square "+style+"' >"+background+"</div></td>";
 			    }
 				text = text + "</tr>";
 			}
