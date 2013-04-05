@@ -44,6 +44,17 @@ test( "Cell Remove Item ", function() {
    
 });
 
+test( "Cell Remove Item Which does not exist.", function() {
+  var matrix = new jsmatrix.Matrix2d(5,5);
+  var cell = matrix.get_cell(0,0);
+
+  cell.remove_item("front");
+
+  ok( cell.size() == 0, "Check Size. Expected 1, was " + cell.size );
+  ok( ! cell.get_item("front"), "Get deleted item." );
+   
+});
+
 test( "Cell Has Item ", function() {
   var matrix = new jsmatrix.Matrix2d(5,5);
   var cell = matrix.get_cell(0,0);

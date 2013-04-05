@@ -136,9 +136,11 @@ var jsmatrix = (function(){
 	Cell.prototype.remove_item = function(key){
 		var item = this.hash.get(key);
 		this.hash.remove(key);
+		if ( item ) {
 		item.row = undefined;
 		item.col = undefined;
 		item.cell = undefined;			
+		}
 	}
 
     // Test: OK
@@ -240,7 +242,7 @@ var jsmatrix = (function(){
 	}
 
     //  What is this?
-    //  Is this even used?
+    // Is this even used?
 	function list(){
 		var object = {};
 		object.size = 0;
