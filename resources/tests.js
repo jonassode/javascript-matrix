@@ -1,13 +1,13 @@
 
 
 test( "Test creation of Matrix", function() {
-  var matrix = jsmatrix.matrix2d(10,15);
+  var matrix = new jsmatrix.Matrix2d(10,15);
   ok( matrix.rows == 10, "Testing Matrix Rows." );
   ok( matrix.cols == 15, "Testing Matrix Cols." );
 });
 
 test( "Cell Set and Get Item", function() {
-  var matrix = jsmatrix.matrix2d(5,5);
+  var matrix = new jsmatrix.Matrix2d(5,5);
   var cell = matrix.get_cell(0,0);
 
   cell.set_item("back",{text: "A"});
@@ -20,7 +20,7 @@ test( "Cell Set and Get Item", function() {
 });
 
 test( "Cell Size ", function() {
-  var matrix = jsmatrix.matrix2d(5,5);
+  var matrix = new jsmatrix.Matrix2d(5,5);
   var cell = matrix.get_cell(0,0);
 
   cell.set_item("back",{text: "A"});
@@ -31,7 +31,7 @@ test( "Cell Size ", function() {
 });
 
 test( "Cell Remove Item ", function() {
-  var matrix = jsmatrix.matrix2d(5,5);
+  var matrix = new jsmatrix.Matrix2d(5,5);
   var cell = matrix.get_cell(0,0);
 
   cell.set_item("back",{text: "A"});
@@ -45,7 +45,7 @@ test( "Cell Remove Item ", function() {
 });
 
 test( "Cell Has Item ", function() {
-  var matrix = jsmatrix.matrix2d(5,5);
+  var matrix = new jsmatrix.Matrix2d(5,5);
   var cell = matrix.get_cell(0,0);
 
   cell.set_item("back",{text: "A"});
@@ -55,7 +55,7 @@ test( "Cell Has Item ", function() {
 });
 
 test( "Cell Has Item by Type", function() {
-  var matrix = jsmatrix.matrix2d(5,5);
+  var matrix = new jsmatrix.Matrix2d(5,5);
   var cell = matrix.get_cell(0,0);
 
   cell.set_item("back",{text: "A"});
@@ -66,7 +66,7 @@ test( "Cell Has Item by Type", function() {
 });
 
 test( "Cell Items", function() {
-  var matrix = jsmatrix.matrix2d(5,5);
+  var matrix = new jsmatrix.Matrix2d(5,5);
   var cell = matrix.get_cell(0,0);
   cell.set_item("back",{text: "A"});
   cell.set_item("front",{text: "B"});  

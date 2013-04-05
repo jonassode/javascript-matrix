@@ -13,7 +13,7 @@
 		    // Setting up the start time
 		    var start_time = (new Date).getTime();
 		    // Start the traverse
-		    var matrix = jsmatrix.matrix2d(rows,cols);
+		    var matrix = new jsmatrix.Matrix2d(rows,cols);
 		    // Calculating the diff time
 		    var diff_time = (new Date).getTime() - start_time;
 
@@ -28,7 +28,6 @@
 		generate(10,100);
 		generate(100,100);
 		generate(100,1000);
-
 
 	</script>
 

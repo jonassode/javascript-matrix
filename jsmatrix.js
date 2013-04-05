@@ -1,5 +1,5 @@
 
-var jsmatrix = {
+var jsmatrix = (function(){
 
 	/**
 	* Creates and returns a 2 dimensional Array.
@@ -8,14 +8,14 @@ var jsmatrix = {
 	* @param {Integer} cols		The height of the new matrix.
 	* @return {Array[Array]}	Returns the matrix.
 	*/
-	create_matrix: function(rows, cols){
+	function create_matrix(rows, cols){
 		var matrix = new Array(rows);
 
 		for( var row = 0; row < rows; row++) {
 			matrix[row] = new Array(cols);
 		}
 		return matrix;
-	},
+	}
 
 	/**
 	* Creates and returns a 2d matrix with lots of great methods.
@@ -24,229 +24,224 @@ var jsmatrix = {
 	* @param {Integer} cols		The height of the new matrix.
 	* @return {Array[Array]}	Returns the matrix.
 	*/
-	matrix2d: function(rows, cols){
-		var object = {};
-		object.rows = rows;
-		object.cols = cols;
-
-		/**
-		* Returns a specified cell
-		*
-		* @param {Integer} row		The row of the cell.
-		* @param {Integer} col		The col of the cell.
-		* @return {cell}		Returns the cell.
-		*/
-		object.get_cell = function(row,col){
-			if ( row < this.matrix.length && row >= 0 ){
-				return this.matrix[row][col];
-			} else {
-				return undefined;
-			}
-		}
-
-		object.set_cell = function(row,col,cell){
-			this.matrix[row][col] = cell;
-			cell.row = row;
-			cell.col = col;
-			cell.matrix = this;
-		}
-
-		object.create_vos_matrix = function(){
-			var matrix = jsmatrix.create_matrix(this.rows, this.cols);
-			return matrix;
-		}
-
-		object.rotate_right = function(){
-			var matrix = jsmatrix.create_matrix(this.rows, this.cols);
-
-			// Shift Right
-			for( var row = 0; row < this.rows; row++) {
-				for( var col = 0; col < this.cols; col++) {
-					matrix[col][(this.cols - (row+1))] = object.matrix[row][col];
-				}
-			}
-			this.matrix = matrix;
-		}
-
-		object.rotate_left = function(){
-			var matrix = jsmatrix.create_matrix(this.rows, this.cols);
-
-			// Shift Left
-			for( var row = 0; row < this.rows; row++) {
-				for( var col = 0; col < this.cols; col++) {
-					matrix[this.cols - (col+1)][row] = object.matrix[row][col];
-				}
-			}
-			this.matrix = matrix;
-		}
-
-		object.mirror_vertical = function(){
-			var matrix = jsmatrix.create_matrix(this.rows, this.cols);
-
-			// Shift Left
-			for( var row = 0; row < this.rows; row++) {
-				for( var col = 0; col < this.cols; col++) {
-					matrix[row][this.cols - (col+1)] = object.matrix[row][col];
-				}
-			}
-			this.matrix = matrix;
-		}
-
-		object.mirror_horizontal = function(){
-			var matrix = jsmatrix.create_matrix(this.rows, this.cols);
-
-			// Shift Left
-			for( var row = 0; row < this.rows; row++) {
-				for( var col = 0; col < this.cols; col++) {
-					matrix[this.rows - (row+1)][col] = object.matrix[row][col];
-				}
-			}
-			this.matrix = matrix;
-		}
-
-		object.matrix = new Array(rows);
+	function Matrix2d(rows, cols){
+		this.rows = rows;
+		this.cols = cols;
+		
+		this.matrix = new Array(rows);
 
 		for( var row = 0; row < rows; row++) {
-			object.matrix[row] = new Array(cols);
+			this.matrix[row] = new Array(cols);
 	        	for( var col = 0; col < cols; col++) {
-				object.set_cell(row,col,jsmatrix.cell());
+				this.set_cell(row,col, new Cell());
+			}
+		}		
+	}
+
+	/**
+	* Returns a specified cell
+	*
+	* @param {Integer} row		The row of the cell.
+	* @param {Integer} col		The col of the cell.
+	* @return {cell}		Returns the cell.
+	*/
+	Matrix2d.prototype.get_cell = function(row,col){
+		if ( row < this.matrix.length && row >= 0 ){
+			return this.matrix[row][col];
+		} else {
+			return undefined;
+		}
+	}
+
+	Matrix2d.prototype.set_cell = function(row,col,cell){
+		this.matrix[row][col] = cell;
+		cell.row = row;
+		cell.col = col;
+		cell.matrix = this;
+	}
+
+	Matrix2d.prototype.create_vos_matrix = function(){
+		var matrix = jsmatrix.create_matrix(this.rows, this.cols);
+		return matrix;
+	}
+
+	Matrix2d.prototype.rotate_right = function(){
+		var matrix = jsmatrix.create_matrix(this.rows, this.cols);
+
+		// Shift Right
+		for( var row = 0; row < this.rows; row++) {
+			for( var col = 0; col < this.cols; col++) {
+				matrix[col][(this.cols - (row+1))] = this.matrix[row][col];
 			}
 		}
+		this.matrix = matrix;
+	}
 
-		return object;
-	},
+	Matrix2d.prototype.rotate_left = function(){
+		var matrix = jsmatrix.create_matrix(this.rows, this.cols);
+
+		// Shift Left
+		for( var row = 0; row < this.rows; row++) {
+			for( var col = 0; col < this.cols; col++) {
+				matrix[this.cols - (col+1)][row] = this.matrix[row][col];
+			}
+		}
+		this.matrix = matrix;
+	}
+
+	Matrix2d.prototype.mirror_vertical = function(){
+		var matrix = jsmatrix.create_matrix(this.rows, this.cols);
+
+		// Shift Left
+		for( var row = 0; row < this.rows; row++) {
+			for( var col = 0; col < this.cols; col++) {
+				matrix[row][this.cols - (col+1)] = this.matrix[row][col];
+			}
+		}
+		this.matrix = matrix;
+	}
+
+	Matrix2d.prototype.mirror_horizontal = function(){
+		var matrix = jsmatrix.create_matrix(this.rows, this.cols);
+
+		// Shift Left
+		for( var row = 0; row < this.rows; row++) {
+			for( var col = 0; col < this.cols; col++) {
+				matrix[this.rows - (row+1)][col] = this.matrix[row][col];
+			}
+		}
+		this.matrix = matrix;
+	}
 
 	// Cell
-	cell: function(){
-		var object = {};
-		object.hash  = jsmatrix.hash();
+	function Cell(){
+		this.hash  = new Hash();
+	}
 
-        // Test: OK
-		object.set_item = function(key,item){
-			this.hash.set(key,item);
-			item.key = key;
-			item.row = this.row;
-			item.col = this.col;
-			item.cell = this;			
-		}
+    // Test: OK
+	Cell.prototype.set_item = function(key,item){
+		this.hash.set(key,item);
+		item.key = key;
+		item.row = this.row;
+		item.col = this.col;
+		item.cell = this;			
+	}
 
-        // Test: OK
-		object.get_item = function(key){
-			return this.hash.get(key);
+    // Test: OK
+	Cell.prototype.get_item = function(key){
+		return this.hash.get(key);
+	}
+	
+	// Test: OK
+	Cell.prototype.remove_item = function(key){
+		var item = this.hash.get(key);
+		this.hash.remove(key);
+		item.row = undefined;
+		item.col = undefined;
+		item.cell = undefined;			
+	}
+
+    // Test: OK
+	Cell.prototype.size = function(){
+		return this.hash.size;
+	}
+
+    // Test: OK
+	Cell.prototype.has_item_by_type = function(key){
+		var boolean = false;
+		if ( this.hash.get(key) != undefined ){
+			boolean = true;
 		}
+		return boolean;
+	}
+
+    // Test: OK
+	Cell.prototype.has_item = function(){
+		var boolean = false;
+		if ( this.hash.length() != 0 ){
+			boolean = true;
+		}
+		return boolean;
+	}
+
+    // Test: OK
+	Cell.prototype.items = function(){
+		return this.hash.hash;
+	}
+
+    // Test: OK
+	Cell.prototype.right = function(){
+		var col = this.col+1;
+		return this.matrix.get_cell(this.row, col);
+	}
+
+	Cell.prototype.left = function(){
+		var col = this.col-1;
+		return this.matrix.get_cell(this.row, col);
+	}
+
+	Cell.prototype.up = function(){
+		var row = this.row - 1;
+		return this.matrix.get_cell(row, this.col);
+	}
+
+	Cell.prototype.down = function(){
+		var row = this.row + 1;
+		return this.matrix.get_cell(row, this.col);
+	}
+
+	Cell.prototype.directions = function(){
+		var array = new Array();
+
+		array.push(this.up());
+		array.push(this.right());
+		array.push(this.down());
+		array.push(this.left());
+
+		return array;
+	}
+
+	Cell.prototype.move = function(item, cell){
+		this.remove_item(item.key);
+		cell.set_item(item.key, item);
+	}
+
+
+	function Hash(){
+		this.size = 0;
+		this.hash = new Array();
 		
-		// Test: OK
-		object.remove_item = function(key){
-			var item = this.hash.get(key);
-			this.hash.remove(key);
-			item.row = undefined;
-			item.col = undefined;
-			item.cell = undefined;			
-		}
+	}
+	
+	Hash.prototype.set = function(key, item){
+		this.size++;
+		this.hash.push(item);
+	}
 
-        // Test: OK
-		object.size = function(){
-			return this.hash.size;
-		}
-
-        // Test: OK
-		object.has_item_by_type = function(key){
-			var boolean = false;
-			if ( this.hash.get(key) != undefined ){
-				boolean = true;
-			}
-			return boolean;
-		}
-
-        // Test: OK
-		object.has_item = function(){
-			var boolean = false;
-			if ( this.hash.length() != 0 ){
-				boolean = true;
-			}
-			return boolean;
-		}
-
-        // Test: OK
-		object.items = function(){
-			return this.hash.hash;
-		}
-
-        // Test: OK
-		object.right = function(){
-			var col = this.col+1;
-			return this.matrix.get_cell(this.row, col);
-		}
-
-		object.left = function(){
-			var col = this.col-1;
-			return this.matrix.get_cell(this.row, col);
-		}
-
-		object.up = function(){
-			var row = this.row - 1;
-			return this.matrix.get_cell(row, this.col);
-		}
-
-		object.down = function(){
-			var row = this.row + 1;
-			return this.matrix.get_cell(row, this.col);
-		}
-
-		object.directions = function(){
-			var array = new Array();
-
-			array.push(this.up());
-			array.push(this.right());
-			array.push(this.down());
-			array.push(this.left());
-
-			return array;
-		}
-
-		object.move = function(item, cell){
-			this.remove_item(item.key);
-			cell.set_item(item.key, item);
-		}
-
-		return object;
-	},
-
-	hash: function(){
-		var object = {};
-		object.size = 0;
-		object.hash = new Array();
-		
-		object.set = function(key, item){
-			this.size++;
-			this.hash.push(item);
-		}
-
-		object.get = function(key){
-			for (var i=0;i<this.hash.length;i++){
-				if (this.hash[i].key == key){
-					return this.hash[i];
-				}
+	Hash.prototype.get = function(key){
+		for (var i=0;i<this.hash.length;i++){
+			if (this.hash[i].key == key){
+				return this.hash[i];
 			}
 		}
+	}
 
-		object.remove = function(key){
-			for (var i=0;i<this.hash.length;i++){
-				if (this.hash[i].key == key){
-					this.hash.splice(i,1);
-					this.size--;
-				}
+	Hash.prototype.remove = function(key){
+		for (var i=0;i<this.hash.length;i++){
+			if (this.hash[i].key == key){
+				this.hash.splice(i,1);
+				this.size--;
 			}
 		}
+	}
 
-		object.length = function(){
-			return this.size;
-		}
+    Hash.prototype.length = function(){
+		return this.size;
+	}
 
-		return object;
-	},
-
-	list: function(){
+    //  What is this?
+    //  Is this even used?
+	function list(){
 		var object = {};
 		object.size = 0;
 		object.list = new Array();
@@ -261,9 +256,15 @@ var jsmatrix = {
 		}
 		
 		return object;
-	},
+	}
+	
+	return {
+	    Matrix2d: Matrix2d,
+	    create_matrix: create_matrix
+	}
 
-}
+}())
+
 
 
 
