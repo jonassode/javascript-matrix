@@ -7,10 +7,10 @@ var jsmatrix = (function(){
     SquareNonDiagonal.prototype.directions = function(cell){
     	var array = new Array();
 
-	    array.push(cell.up());
-	    array.push(cell.right());
-	    array.push(cell.down());
-	    array.push(cell.left());
+	    array.push(cell.north());
+	    array.push(cell.east());
+	    array.push(cell.south());
+	    array.push(cell.west());
 
 	    return array;
     }
@@ -21,14 +21,14 @@ var jsmatrix = (function(){
     SquareDiagonal.prototype.directions = function(cell){
     	var array = new Array();
 
-	    array.push(cell.up());
-	    array.push(cell.right());
-	    array.push(cell.down());
-	    array.push(cell.left());
-	    array.push(cell.ne());
-	    array.push(cell.se());
-	    array.push(cell.nw());
-	    array.push(cell.sw());
+	    array.push(cell.north());
+	    array.push(cell.east());
+	    array.push(cell.south());
+	    array.push(cell.west());
+	    array.push(cell.northeast());
+	    array.push(cell.southeast());
+	    array.push(cell.northwest());
+	    array.push(cell.southwest());
 
 	    return array;
     }
@@ -205,48 +205,48 @@ var jsmatrix = (function(){
 	}
 
     // Test: OK
-	Cell.prototype.right = function(){
+	Cell.prototype.east = function(){
 		var col = this.col+1;
 		return this.matrix.get_cell(this.row, col);
 	}
 
-	Cell.prototype.left = function(){
+	Cell.prototype.west = function(){
 		var col = this.col-1;
 		return this.matrix.get_cell(this.row, col);
 	}
 
-	Cell.prototype.up = function(){
+	Cell.prototype.north = function(){
 		var row = this.row - 1;
 		return this.matrix.get_cell(row, this.col);
 	}
 
-	Cell.prototype.down = function(){
+	Cell.prototype.south = function(){
 		var row = this.row + 1;
 		return this.matrix.get_cell(row, this.col);
 	}
 
-	Cell.prototype.ne = function(){
+	Cell.prototype.northeast = function(){
 		var row = this.row - 1;
 		var col = this.col + 1;
 
 		return this.matrix.get_cell(row, col);
 	}
 
-	Cell.prototype.se = function(){
+	Cell.prototype.southeast = function(){
 		var row = this.row + 1;
 		var col = this.col + 1;
 
 		return this.matrix.get_cell(row, col);
 	}
 	
-	Cell.prototype.nw = function(){
+	Cell.prototype.northwest = function(){
 		var row = this.row - 1;
 		var col = this.col - 1;
 
 		return this.matrix.get_cell(row, col);
 	}
 
-	Cell.prototype.sw = function(){
+	Cell.prototype.southwest = function(){
 		var row = this.row + 1;
 		var col = this.col - 1;
 

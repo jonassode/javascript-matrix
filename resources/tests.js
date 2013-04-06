@@ -103,7 +103,16 @@ test( "Cell Directions Diagonal", function() {
   var cell = matrix.get_cell(3,3);
   var directions = cell.directions();
 
-  ok( directions.length === 8, "There should be 4 directions." );
+  ok( directions.length === 8, "There should be 8 directions." );
+
+  ok( cell.northeast().row === 2, "Checking the northeast cell row");
+  ok( cell.northeast().col === 4, "Checking the northeast cell col");
+  ok( cell.northwest().row === 2, "Checking the northwest cell row");
+  ok( cell.northwest().col === 2, "Checking the northwest cell col");
+  ok( cell.southeast().row === 4, "Checking the southeast cell row");
+  ok( cell.southeast().col === 4, "Checking the southeast cell col");
+  ok( cell.southwest().row === 4, "Checking the southwest cell row");
+  ok( cell.southwest().col === 2, "Checking the southwest cell col");
 
 });
 
