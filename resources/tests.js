@@ -96,6 +96,11 @@ test( "Cell Directions", function() {
 
   ok( directions.length === 4, "There should be 4 directions." );
 
+  ok( cell.north().row === 2, "Checking the north cell row");
+  ok( cell.south().row === 4, "Checking the south cell row");
+  ok( cell.west().col === 2, "Checking the west cell col");
+  ok( cell.east().col === 4, "Checking the east cell col");
+
 });
 
 test( "Cell Directions Diagonal", function() {
@@ -113,6 +118,36 @@ test( "Cell Directions Diagonal", function() {
   ok( cell.southeast().col === 4, "Checking the southeast cell col");
   ok( cell.southwest().row === 4, "Checking the southwest cell row");
   ok( cell.southwest().col === 2, "Checking the southwest cell col");
+
+});
+
+test( "Cell Directions Hex Uneven rows", function() {
+  var matrix = new jsmatrix.Matrix2d(5,5, new jsmatrix.Hex());
+
+  // UnEven
+  var cell = matrix.get_cell(3,3);
+  var directions = cell.directions();
+  ok( directions.length === 6, "There should be 6 directions." );
+
+  ok( cell.northeast().col === 4, "Checking the northeast cell col");
+  ok( cell.north().col === 3, "Checking the north cell col");
+  ok( cell.southeast().col === 4, "Checking the southeast cell col");
+  ok( cell.south().col === 3, "Checking the south cell col");
+
+});
+
+test( "Cell Directions Hex Even rows", function() {
+  var matrix = new jsmatrix.Matrix2d(5,5, new jsmatrix.Hex());
+
+  // UnEven
+  var cell = matrix.get_cell(2,3);
+  var directions = cell.directions();
+  ok( directions.length === 6, "There should be 6 directions." );
+
+  ok( cell.northeast().col === 3, "Checking the northeast cell col");
+  ok( cell.north().col === 2, "Checking the north cell col");
+  ok( cell.southeast().col === 3, "Checking the southeast cell col");
+  ok( cell.south().col === 2, "Checking the south cell col");
 
 });
 

@@ -2,7 +2,7 @@
 var jsmatrix = (function(){
 
     function SquareNonDiagonal(){
-        this.type = "SquareNonDiagonal";
+        this.name = "SquareNonDiagonal";
     }
     SquareNonDiagonal.prototype.directions = function(cell){
     	var array = new Array();
@@ -16,7 +16,7 @@ var jsmatrix = (function(){
     }
     
     function SquareDiagonal(){
-        this.type = "SquareDiagonal";   
+        this.name = "SquareDiagonal";   
     }
     SquareDiagonal.prototype.directions = function(cell){
     	var array = new Array();
@@ -32,6 +32,22 @@ var jsmatrix = (function(){
 
 	    return array;
     }
+    function Hex(){
+        this.name = "Hex";   
+    }
+    Hex.prototype.directions = function(cell){
+    	var array = new Array();
+
+	    array.push(cell.north());
+	    array.push(cell.east());
+	    array.push(cell.south());
+	    array.push(cell.west());
+	    array.push(cell.northeast());
+	    array.push(cell.southeast());
+
+	    return array;
+    }    
+    
 
 	/**
 	* Creates and returns a 2 dimensional Array.
@@ -217,24 +233,27 @@ var jsmatrix = (function(){
 
 	Cell.prototype.north = function(){
 		var row = this.row - 1;
-		return this.matrix.get_cell(row, this.col);
+        var col = ( this.matrix.type.name === "Hex" && this.row%2 == 0) ? this.col - 1 : this.col; 
+		
+		return this.matrix.get_cell(row, col);
 	}
 
 	Cell.prototype.south = function(){
 		var row = this.row + 1;
-		return this.matrix.get_cell(row, this.col);
+		var col = ( this.matrix.type.name === "Hex" && this.row%2 == 0) ? this.col - 1 : this.col;
+		return this.matrix.get_cell(row, col);
 	}
 
 	Cell.prototype.northeast = function(){
 		var row = this.row - 1;
-		var col = this.col + 1;
+		var col = ( this.matrix.type.name === "Hex" && this.row%2 == 0) ? this.col : this.col + 1;
 
 		return this.matrix.get_cell(row, col);
 	}
 
 	Cell.prototype.southeast = function(){
 		var row = this.row + 1;
-		var col = this.col + 1;
+		var col = ( this.matrix.type.name === "Hex" && this.row%2 == 0) ? this.col : this.col + 1;
 
 		return this.matrix.get_cell(row, col);
 	}
@@ -242,6 +261,10 @@ var jsmatrix = (function(){
 	Cell.prototype.northwest = function(){
 		var row = this.row - 1;
 		var col = this.col - 1;
+		
+		if ( this.matrix.type.name === "Hex" ) {
+		    throw "This method, northwest not supproted when using hex";
+		}
 
 		return this.matrix.get_cell(row, col);
 	}
@@ -249,6 +272,10 @@ var jsmatrix = (function(){
 	Cell.prototype.southwest = function(){
 		var row = this.row + 1;
 		var col = this.col - 1;
+
+		if ( this.matrix.type.name === "Hex" ) {
+		    throw "This method, northwest not supproted when using hex";
+		}
 
 		return this.matrix.get_cell(row, col);
 	}
@@ -318,7 +345,8 @@ var jsmatrix = (function(){
 	return {
 	    Matrix2d: Matrix2d,
 	    create_matrix: create_matrix,
-	    SquareDiagonal: SquareDiagonal
+	    SquareDiagonal: SquareDiagonal,
+	    Hex: Hex
 	}
 
 }())
