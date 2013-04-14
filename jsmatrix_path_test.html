@@ -1,0 +1,106 @@
+
+<html>
+<head>
+    <script src="jsmatrix.js"></script>
+    <script src="jsmatrix-pathfinding.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>    
+
+	<style type="text/css">
+    .hex {
+        float: left;
+        margin-left: 3px;
+        margin-bottom: -26px;
+    }
+    .hex .top {
+        width: 0;
+        border-bottom: 30px solid silver;
+        border-left: 52px solid transparent;
+        border-right: 52px solid transparent;
+    }
+    .hex .middle {
+        line-height: 60px;
+        text-align:center;
+        width: 104px;
+        height: 60px;
+        background: silver;
+    }
+    .hex .bottom {
+        width: 0;
+        border-top: 30px solid silver;
+        border-left: 52px solid transparent;
+        border-right: 52px solid transparent;
+    }
+    .hex-row {
+        clear: left;
+    }
+    .hex-row.even {
+        margin-left: 53px;
+    }
+		
+	</style>
+</head>
+<body>
+<div id="hex_area">&nbsp;</div>
+    <script>
+
+     	function draw_path(r, c){
+		    // Defining the start and goal positions
+		    var start = {row: r, col: c }
+		    var goal = {row: 0, col: 0 }  
+		    var path = matrix.find_path(start, goal);   
+
+            // Clean up path     	
+			for( var row = 0; row < matrix.rows; row++) {
+		        	for( var col = 0; col < matrix.cols; col++) {
+		        	    var cell = matrix.get_cell(row,col);
+		        	    cell.has_item_by_type("path") ? cell.remove_item('path') : false;
+		        	    cell.has_item_by_type("start") ? cell.remove_item('start') : false;
+		        	}
+		    }
+		    
+		    matrix.get_cell(r,c).set_item('start', {});
+
+            for ( i = 0; i < path.length; i++ ){
+                var pos = path[i];
+                matrix.get_cell(pos.row,pos.col).set_item('path', {});           
+            }		    
+		    
+		    draw_hex_grid(matrix);
+		}
+    
+        function draw_hex_grid(matrix){
+            var text = "";
+            var even = 0;
+            var color;
+            var content;
+			for( var row = 0; row < matrix.rows; row++) {
+                if ( ! even ){
+                    text += "<div class='hex-row'>"; even=1;
+                } else {
+                    text += "<div class='hex-row even'>"; even=0;
+                }
+                
+	        	for( var col = 0; col < matrix.cols; col++) {
+
+    				var color = matrix.get_cell(row,col).has_item_by_type("path") ? "pink" : "gray";
+    				color = matrix.get_cell(row,col).has_item_by_type("start") ? "black" : color;
+
+	        	    text += "<div class='hex' onclick='draw_path("+row+","+col+");'>";
+	        	    text += "<div class='top' style='border-bottom-color:"+color+";'></div>";
+	        	    text += "<div class='middle' style='background:"+color+";'></div>";
+	        	    text += "<div class='bottom' style='border-top-color:"+color+";'></div>";
+	        	    text += "</div>";
+	        	}
+	        	text += "</div>";
+		    }
+		    
+            document.getElementById('hex_area').innerHTML = text;
+        }
+        
+        var matrix = new jsmatrix.Matrix2d(6, 10, new jsmatrix.Hex());
+        
+        draw_hex_grid(matrix);
+    </script>
+</body>
+</html>
+
