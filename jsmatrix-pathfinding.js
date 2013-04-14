@@ -1,12 +1,21 @@
 
 
-jsmatrix.Matrix2d.prototype.find_path = function(start, goal){
+jsmatrix.Configuration = function() {
+    this.blockers = new Array;    
+}
+
+jsmatrix.Configuration.prototype.add_blocker = function(type){
+    this.blockers.push(type);
+}
+
+jsmatrix.Matrix2d.prototype.find_path = function(start, goal, configuration){
 
     // Maximum number of steps
     this.timeout = 3000;
 
 	var path = new Array();
 	this.nodes = new Array();
+	this.configuration = configuration;
 
 	var node = new jsmatrix.Node(start, goal, undefined);
 	node.steps = 0;
@@ -63,7 +72,6 @@ jsmatrix.calculate_distance = function(position, goal){
 // Document me
 jsmatrix.at_goal = function(start, goal){
 	if ( start.row == goal.row && start.col == goal.col ){
-	    console.log('Goal found.');
 		return true;
 	}
 };
@@ -117,7 +125,8 @@ jsmatrix.Matrix2d.prototype.traverse = function(node, goal, path){
                 // Create a Position
 		        var pos = {row: next_cell.row, col: next_cell.col };
 
-				if ( !this.node_exists(pos) ){
+				if ( !this.node_exists(pos) && ! this.is_blocking(cell) ){
+
     				pos.weight = 1;
             		var new_node = new jsmatrix.Node(pos, goal, node);
 			        this.nodes.push(new_node);
@@ -136,6 +145,19 @@ jsmatrix.Matrix2d.prototype.traverse = function(node, goal, path){
 		}
 	}
 };
+
+jsmatrix.Matrix2d.prototype.is_blocking = function(cell){
+    var blocking = false;
+    if ( this.configuration ) {
+        for ( var i = 0; i < this.configuration.blockers.length; i++){
+            var blocking_type = this.configuration.blockers[i];
+            if ( cell.has_item_by_type(blocking_type) ){
+                return true;        
+            }
+        }
+    }
+    return blocking;
+}
 
 // Document me
 jsmatrix.Matrix2d.prototype.lowest_weighted_node = function(){
