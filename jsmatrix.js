@@ -75,7 +75,7 @@ var jsmatrix = (function(){
 	function Matrix2d(rows, cols, type){
 		this.rows = rows;
 		this.cols = cols;
-		this.type = type? type: new SquareNonDiagonal();
+		this.type = type ? type : new SquareNonDiagonal();
 		
 		this.matrix = new Array(rows);
 
@@ -346,6 +346,7 @@ var jsmatrix = (function(){
 	    Matrix2d: Matrix2d,
 	    create_matrix: create_matrix,
 	    SquareDiagonal: SquareDiagonal,
+	    SquareNonDiagonal: SquareNonDiagonal,
 	    Hex: Hex
 	}
 
