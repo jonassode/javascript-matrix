@@ -45,12 +45,14 @@
 		
 	</style>
 </head>
-<body>
+<body onkeydown=' keypressed = true;' onkeyup=' keypressed = false;'>
 <button onclick='draw_grid = draw_hex_grid; new_matrix(new jsmatrix.Hex()); '>Hex</button> 
 <button onclick='draw_grid = draw_square_grid; new_matrix(new jsmatrix.SquareNonDiagonal()); '>Square</button> 
 <button onclick='draw_grid = draw_square_grid; new_matrix(new jsmatrix.SquareDiagonal());  '>Square w. Diagonal Movement</button> 
 
-<div id="hex_area">&nbsp;</div>
+<div>Click to create a path</div>
+<div>Hold down any key and click to create a blocker in that hex</div>
+<div id="hex_area">&nbsp;</div><br>
     <script>
 
         // Create Configuration to block rocks
@@ -58,11 +60,7 @@
         conf.add_blocker("rock");
         
      	function draw_path(r, c){
-		    // Defining the start and goal positions
-		    var start = {row: r, col: c }
-		    var goal = {row: 0, col: 0 }  
-		    var path = matrix.find_path(start, goal, conf);   
-
+     	
             // Clean up path     	
 			for( var row = 0; row < matrix.rows; row++) {
 		        	for( var col = 0; col < matrix.cols; col++) {
@@ -71,13 +69,23 @@
 		        	    cell.has_item_by_type("start") ? cell.remove_item('start') : false;
 		        	}
 		    }
-		    
-		    matrix.get_cell(r,c).set_item('start', {});
 
-            for ( i = 0; i < path.length; i++ ){
-                var pos = path[i];
-                matrix.get_cell(pos.row,pos.col).set_item('path', {});           
-            }		    
+     	    if ( keypressed ){
+     	        matrix.get_cell(r,c).set_item('rock', {});
+     	    } else {
+
+		        // Defining the start and goal positions
+		        var start = {row: r, col: c }
+		        var goal = {row: 5, col: 9 }  
+		        var path = matrix.find_path(start, goal, conf);   
+	    
+		        matrix.get_cell(r,c).set_item('start', {});
+
+                for ( i = 0; i < path.length; i++ ){
+                    var pos = path[i];
+                    matrix.get_cell(pos.row,pos.col).set_item('path', {});           
+                }		    
+            }
 		    
 		    draw_grid(matrix);
 		}
@@ -135,6 +143,8 @@
 		    
             document.getElementById('hex_area').innerHTML = text;
         }
+
+        var keypressed = false;
 
         function new_matrix(type){
             matrix = new jsmatrix.Matrix2d(6, 10, type);

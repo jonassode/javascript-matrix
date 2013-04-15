@@ -94,7 +94,7 @@ jsmatrix.Matrix2d.prototype.node_exists = function(position){
         var node = this.nodes[i];
 		if ( node.pos.row == position.row && node.pos.col == position.col ){
 			found = true;
-			return false;
+			return true;
 		}	
 	};
 	return found;
@@ -164,7 +164,7 @@ jsmatrix.Matrix2d.prototype.lowest_weighted_node = function(){
 	var node = undefined;
 	var weight = 0;
 
-	// Check if we already have node in table
+	// Return lowest weighted node
 	for( var i = 0; i < this.nodes.length; i++){
         var check_node = this.nodes[i];
 		if ( check_node.active == true ) {
