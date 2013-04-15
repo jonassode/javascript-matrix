@@ -61,6 +61,8 @@
         
      	function draw_path(r, c){
      	
+     	    var ccell = matrix.get_cell(r,c);
+     	
             // Clean up path     	
 			for( var row = 0; row < matrix.rows; row++) {
 		        	for( var col = 0; col < matrix.cols; col++) {
@@ -71,7 +73,11 @@
 		    }
 
      	    if ( keypressed ){
-     	        matrix.get_cell(r,c).set_item('rock', {});
+     	        if ( ccell.has_item_by_type('rock') ){
+     	            ccell.remove_item('rock');
+     	        } else {
+         	        ccell.set_item('rock', {});
+         	    }
      	    } else {
 
 		        // Defining the start and goal positions
@@ -79,7 +85,7 @@
 		        var goal = {row: 5, col: 9 }  
 		        var path = matrix.find_path(start, goal, conf);   
 	    
-		        matrix.get_cell(r,c).set_item('start', {});
+		        ccell.set_item('start', {});
 
                 for ( i = 0; i < path.length; i++ ){
                     var pos = path[i];
