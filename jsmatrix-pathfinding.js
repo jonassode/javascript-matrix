@@ -86,13 +86,13 @@ jsmatrix.Matrix2d.prototype.reverse_path = function(position, path){
 };
 
 // Document me
-jsmatrix.Matrix2d.prototype.node_exists = function(position){
+jsmatrix.Matrix2d.prototype.node_exists = function(position, steps){
 	var found = false;
 
 	// Check if we already have node in table
 	for( var i = 0; i < this.nodes.length; i++){
         var node = this.nodes[i];
-		if ( node.pos.row == position.row && node.pos.col == position.col ){
+		if ( node.pos.row == position.row && node.pos.col == position.col && node.steps == steps ){
 			found = true;
 			return true;
 		}	
@@ -125,7 +125,7 @@ jsmatrix.Matrix2d.prototype.traverse = function(node, goal, path){
                 // Create a Position
 		        var pos = {row: next_cell.row, col: next_cell.col };
 
-				if ( !this.node_exists(pos) && ! this.is_blocking(cell) ){
+				if ( !this.node_exists(pos, node.steps + 1) && ! this.is_blocking(cell) ){
 
     				pos.weight = 1;
             		var new_node = new jsmatrix.Node(pos, goal, node);
