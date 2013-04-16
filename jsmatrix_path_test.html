@@ -78,20 +78,25 @@
      	        } else {
          	        ccell.set_item('rock', {});
          	    }
-     	    } else {
+         	    r = previous_row;
+         	    c = previous_col;
+         	    ccell = matrix.get_cell(r,c);
+     	    }
 
-		        // Defining the start and goal positions
-		        var start = {row: r, col: c }
-		        var goal = {row: 5, col: 9 }  
-		        var path = matrix.find_path(start, goal, conf);   
-	    
-		        ccell.set_item('start', {});
+	        // Defining the start and goal positions
+	        var start = {row: r, col: c }
+	        var goal = {row: 5, col: 9 }  
+	        var path = matrix.find_path(start, goal, conf);   
+    
+	        ccell.set_item('start', {});
 
-                for ( i = 0; i < path.length; i++ ){
-                    var pos = path[i];
-                    matrix.get_cell(pos.row,pos.col).set_item('path', {});           
-                }		    
-            }
+            for ( i = 0; i < path.length; i++ ){
+                var pos = path[i];
+                matrix.get_cell(pos.row,pos.col).set_item('path', {});           
+            }		    
+
+            previous_row = r;
+            previous_col = c;
 		    
 		    draw_grid(matrix);
 		}
@@ -151,6 +156,7 @@
         }
 
         var keypressed = false;
+        var previous_row, previous_col;
 
         function new_matrix(type){
             matrix = new jsmatrix.Matrix2d(6, 10, type);
