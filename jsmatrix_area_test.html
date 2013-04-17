@@ -1,0 +1,181 @@
+
+<html>
+<head>
+    <script src="jsmatrix.js"></script>
+    <script src="jsmatrix-pathfinding.js"></script>
+
+	<style type="text/css">
+    .hex {
+        float: left;
+        margin-left: 3px;
+        margin-bottom: -26px;
+    }
+    .hex .top {
+        width: 0;
+        border-bottom: 30px solid silver;
+        border-left: 52px solid transparent;
+        border-right: 52px solid transparent;
+    }
+    .hex .middle {
+        line-height: 60px;
+        text-align:center;
+        width: 104px;
+        height: 60px;
+        background: silver;
+    }
+    .hex .bottom {
+        width: 0;
+        border-top: 30px solid silver;
+        border-left: 52px solid transparent;
+        border-right: 52px solid transparent;
+    }
+    .hex-row {
+        clear: left;
+    }
+    .hex-row.even {
+        margin-left: 53px;
+    }
+    .square {
+        line-height: 60px;
+        text-align:center;
+        width: 104px;
+        height: 104px;
+        background: silver;
+    }
+		
+	</style>
+</head>
+<body onkeydown=' keypressed = true;' onkeyup=' keypressed = false;'>
+<button onclick='draw_grid = draw_hex_grid; new_matrix(new jsmatrix.Hex()); '>Hex</button> 
+<button onclick='draw_grid = draw_square_grid; new_matrix(new jsmatrix.SquareNonDiagonal()); '>Square</button> 
+<button onclick='draw_grid = draw_square_grid; new_matrix(new jsmatrix.SquareDiagonal());  '>Square w. Diagonal Movement</button> 
+
+<div>Click to create a path</div>
+<div>Hold down any key and click to create a blocker in that hex</div>
+<div id="hex_area">&nbsp;</div><br>
+    <script>
+
+        // Create Configuration to block rocks
+        var conf = new jsmatrix.Configuration();
+        conf.add_blocker("rock");
+        
+     	function draw_path(r, c){
+     	
+     	    var ccell = matrix.get_cell(r,c);
+     	
+            // Clean up path     	
+			for( var row = 0; row < matrix.rows; row++) {
+		        	for( var col = 0; col < matrix.cols; col++) {
+		        	    var cell = matrix.get_cell(row,col);
+		        	    cell.has_item_by_type("path") ? cell.remove_item('path') : false;
+		        	    cell.has_item_by_type("start") ? cell.remove_item('start') : false;
+		        	}
+		    }
+
+     	    if ( keypressed ){
+     	        if ( ccell.has_item_by_type('rock') ){
+     	            ccell.remove_item('rock');
+     	        } else {
+         	        ccell.set_item('rock', {});
+         	    }
+         	    r = previous_row;
+         	    c = previous_col;
+         	    ccell = matrix.get_cell(r,c);
+     	    }
+
+	        // Defining the start and goal positions
+	        var depth = 2;
+	        var start = {row: r, col: c }
+	        var goal = {row: 5, col: 9 }  
+	        var area = matrix.find_area(start, goal, depth, conf);   
+    
+	        ccell.set_item('start', {});
+
+            for ( i = 0; i < area.length; i++ ){
+                var pos = area[i].pos;
+                matrix.get_cell(pos.row,pos.col).set_item('path', {});           
+            }		    
+
+            previous_row = r;
+            previous_col = c;
+		    
+		    draw_grid(matrix);
+		}
+
+        function draw_square_grid(matrix){
+            var text = "";
+            var color;
+            var content;
+            text += "<table>";
+			for( var row = 0; row < matrix.rows; row++) {
+                text += "<tr>";
+                
+	        	for( var col = 0; col < matrix.cols; col++) {
+
+    				var color = matrix.get_cell(row,col).has_item_by_type("path") ? "#99CCFF" : "gray";
+    				color = matrix.get_cell(row,col).has_item_by_type("start") ? "#6699CC" : color;
+    				color = matrix.get_cell(row,col).has_item_by_type("rock") ? "black" : color;
+
+	        	    text += "<td class='square' style='background:"+color+";' onclick='draw_path("+row+","+col+");'></td>";
+
+	        	}
+	        	text += "</tr>";
+		    }
+		    text += "</table>";
+		    
+            document.getElementById('hex_area').innerHTML = text;
+        }
+
+        function draw_hex_grid(matrix){
+            var text = "";
+            var even = 0;
+            var color;
+            var content;
+			for( var row = 0; row < matrix.rows; row++) {
+                if ( ! even ){
+                    text += "<div class='hex-row'>"; even=1;
+                } else {
+                    text += "<div class='hex-row even'>"; even=0;
+                }
+                
+	        	for( var col = 0; col < matrix.cols; col++) {
+
+    				var color = matrix.get_cell(row,col).has_item_by_type("path") ? "#99CCFF" : "gray";
+    				color = matrix.get_cell(row,col).has_item_by_type("start") ? "#6699CC" : color;
+    				color = matrix.get_cell(row,col).has_item_by_type("rock") ? "black" : color;
+
+	        	    text += "<div class='hex' onclick='draw_path("+row+","+col+");'>";
+	        	    text += "<div class='top' style='border-bottom-color:"+color+";'></div>";
+	        	    text += "<div class='middle' style='background:"+color+";'></div>";
+	        	    text += "<div class='bottom' style='border-top-color:"+color+";'></div>";
+	        	    text += "</div>";
+	        	}
+	        	text += "</div>";
+		    }
+		    
+            document.getElementById('hex_area').innerHTML = text;
+        }
+
+        var keypressed = false;
+        var previous_row, previous_col;
+
+        function new_matrix(type){
+            matrix = new jsmatrix.Matrix2d(6, 10, type);
+
+            for ( var i = 0; i < 20; i++){
+                var row = Math.floor((Math.random()*5)+1);
+                var col = Math.floor((Math.random()*9)+1);
+
+                matrix.get_cell(row,col).set_item("rock", {});
+            }
+            draw_grid(matrix);
+        }
+        
+        var draw_grid = draw_hex_grid;
+        new_matrix(new jsmatrix.Hex());
+       
+
+    </script>
+</body>
+</html>
+

@@ -25,6 +25,44 @@ jsmatrix.Matrix2d.prototype.find_path = function(start, goal, configuration){
 
 };
 
+jsmatrix.Matrix2d.prototype.find_area = function(start, goal, depth, configuration){
+
+    // Maximum number of steps
+    this.timeout = 3000;
+
+	this.nodes = new Array();
+	this.configuration = configuration;
+
+	var node = new jsmatrix.Node(start, goal, undefined);
+	node.steps = 0;
+
+	this.traverse_area(node, depth);
+
+    // Clean Up Duplicates	
+	this.remove_duplicates();
+	
+	return this.nodes;
+
+};
+
+jsmatrix.Matrix2d.prototype.remove_duplicates = function() {
+
+    var temp = new Array();
+    for ( var i = 0; i < this.nodes.length; i++ ){
+        var n = this.nodes[i];
+        var found = false;
+        for ( var j = 0; j < temp.length; j++ ){
+            var n2 = temp[j];
+            if ( n.pos.row == n2.pos.row && n.pos.col == n2.pos.col ){
+                found = true;
+            }
+        }
+        if ( ! found ){
+            temp.push(n);
+        }
+    }
+    this.nodes = temp;
+}
 
 /**
 * Creates a node object.
@@ -38,10 +76,12 @@ jsmatrix.Node = function(pos, goal, parent) {
 
 		this.pos = pos;
 		this.active = true;
-		this.goal = goal;
-		this.distance = jsmatrix.calculate_distance(pos, goal);
+		if ( goal ){
+		    this.goal = goal;
+		    this.distance = jsmatrix.calculate_distance(pos, goal);
+		}
 
-		if ( parent != undefined ){
+		if ( parent ){
 			this.steps = parent.steps + pos.weight;
 			this.parent = parent;
 			this.weight = this.distance + this.steps;
@@ -98,6 +138,37 @@ jsmatrix.Matrix2d.prototype.node_exists = function(position, steps){
 		}	
 	};
 	return found;
+};
+
+// Document me
+jsmatrix.Matrix2d.prototype.traverse_area = function(node, depth){
+
+	// Remove myself from this.nodes
+	this.remove_node(node);
+
+    // Get Cell
+    var cell = this.get_cell(node.pos.row, node.pos.col);
+
+	// Add Nodes for this position
+	var directions = cell.directions();
+	for (var i = 0; i < directions.length; i++) {
+	    var next_cell = directions[i];
+
+        // Check if blocked
+		if ( next_cell != undefined ){
+
+            // Create a Position
+	        var pos = {row: next_cell.row, col: next_cell.col };
+
+			if ( !this.node_exists(pos, node.steps) && !this.is_blocking(cell) && (node.steps+1) <= depth ){
+
+				pos.weight = 1;
+        		var new_node = new jsmatrix.Node(pos, undefined, node);
+		        this.nodes.push(new_node);
+		        this.traverse_area(new_node, depth);
+		    }
+		}
+	}
 };
 
 // Document me
